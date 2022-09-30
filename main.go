@@ -5,20 +5,22 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
-
-func Check(e error) {
-	if e != nil {
-		log.Fatal(e)
-		return
-	}
-}
 
 func main() {
 	file, err := os.ReadFile(os.Args[1])
 	Check(err)
-	strFile := string(file)
-	res := SplitWithSpaces(strFile)
+	str := string(file)
+	word := strings.Split(str, " ")
+	word = Running(word)
+	fmt.Println(word)
+	strword := removeword(word)
+	fmt.Println(strword)
+	// strword = Punctuation(strword)
+}
+
+func Running(res []string) []string {
 	for i := range res {
 		if res[i] == "(hex)" {
 			hex, err := strconv.ParseInt(res[i-1], 16, 64)
@@ -29,24 +31,24 @@ func main() {
 			Check(err)
 			res[i-1] = strconv.FormatInt(bin, 10)
 		} else if res[i] == "(up)" {
-			res[i-1] = ToUpper(res[i-1])
+			res[i-1] = strings.ToUpper(res[i-1])
 		} else if res[i] == "(low)" {
-			res[i-1] = ToLower(res[i-1])
+			res[i-1] = strings.ToLower(res[i-1])
 		} else if res[i] == "(cap)" {
-			res[i-1] = Capitalize(res[i-1])
+			res[i-1] = strings.Title(res[i-1])
 		} else if res[i] == "(low," {
 			num := res[i+1]
 			numn, err := strconv.Atoi(num[:len(num)-1])
 			Check(err)
 			for j := 0; j < len(res[i-numn:i]); j++ {
-				res[(i+j)-numn] = ToLower(res[(i+j)-numn])
+				res[(i+j)-numn] = strings.ToLower(res[(i+j)-numn])
 			}
 		} else if res[i] == "(up," {
 			num := res[i+1]
 			numn, err := strconv.Atoi(num[:len(num)-1])
 			Check(err)
 			for j := 0; j < len(res[i-numn:i]); j++ {
-				res[(i+j)-numn] = ToUpper(res[(i+j)-numn])
+				res[(i+j)-numn] = strings.ToUpper(res[(i+j)-numn])
 			}
 
 		} else if res[i] == "(cap," {
@@ -55,71 +57,53 @@ func main() {
 			numn, err := strconv.Atoi(num[:len(num)-1])
 			Check(err)
 			for j := 0; j < len(res[i-numn:i]); j++ {
-				res[(i+j)-numn] = Capitalize(res[(i+j)-numn])
+				res[(i+j)-numn] = strings.Title(res[(i+j)-numn])
 			}
 
+		} else if res[i] == "a" {
+
+			low := strings.ToLower(res[i+1])
+			if low[0] == 'h' || low[0] == 'a' || low[0] == 'e' || low[0] == 'i' || low[0] == 'o' || low[0] == 'u' {
+				res[i] = "an"
+			}
+
+		} else if res[i] == "A" {
+			low := strings.ToLower(res[i+1])
+			if low[0] == 'h' || low[0] == 'a' || low[0] == 'e' || low[0] == 'i' || low[0] == 'o' || low[0] == 'u' {
+				res[i] = "An"
+			}
 		}
 	}
-	fmt.Println(res)
+	return res
 }
 
-func Capitalize(s string) string {
-	str := []byte(ToLower(s))
-	ass := true
-	for i := 0; i < len(str); i++ {
-		if str[i] >= 'a' && str[i] <= 'z' && ass {
-			str[i] -= 32
-			ass = false
-		} else if (str[i] < 'a' || str[i] > 'z') && (str[i] < '0' || str[i] > '9') {
-			ass = true
-		} else {
-			ass = false
-		}
+func Check(err error) {
+	if err != nil {
+		log.Fatal(err)
+		return
+
 	}
-	return string(str)
 }
 
-func ToLower(s string) string {
-	sentence := []rune(s)
-	for i := 0; i < len(sentence); i++ {
+func removeword(s []string) string {
+	str := ""
 
-		currentLetter := sentence[i]
-
-		if currentLetter >= 'A' && currentLetter <= 'Z' {
-			sentence[i] += 32
-		}
-	}
-	return string(sentence)
-}
-
-func ToUpper(s string) string {
-	var str string
-	runes := []rune(s)
-	for i := range runes {
-		if runes[i] >= 'a' && runes[i] <= 'z' {
-			str += string(runes[i] - 'a' + 'A')
-		}
-	}
-	return str
-}
-
-func SplitWithSpaces(s string) []string {
-	var str []string
-	var word string
-	var booles bool
 	for i := range s {
-		if s[i] == ' ' && booles {
-			str = append(str, word)
-			word = ""
-			booles = false
+		if s[i] == "(low," || s[i] == "(up," || s[i] == "(cap," {
+			s[i] = ""
+			s[i+1] = ""
 
-		} else if s[i] != ' ' {
-			word += string(s[i])
-			booles = true
+		} else if s[i] != "(up)" && s[i] != "(low)" && s[i] != "(bin)" && s[i] != "(hex)" && s[i] != "(cap)" {
+			if i == 0 {
+				str += s[i]
+			} else {
+				str += " " + s[i]
+			}
 		}
 	}
-	if len(str) != len(s) {
-		str = append(str, word)
-	}
+
 	return str
 }
+
+// func Punctuation(s string) string {
+// }
