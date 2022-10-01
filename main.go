@@ -14,10 +14,11 @@ func main() {
 	str := string(file)
 	word := strings.Split(str, " ")
 	word = Running(word)
-	fmt.Println(word)
+	// fmt.Println(word)
 	strword := removeword(word)
 	fmt.Println(strword)
-	// strword = Punctuation(strword)
+	strword = Punctuation(strword)
+	fmt.Println(strword)
 }
 
 func Running(res []string) []string {
@@ -105,5 +106,42 @@ func removeword(s []string) string {
 	return str
 }
 
-// func Punctuation(s string) string {
-// }
+func Punctuation(s string) string {
+	str := ""
+
+	for i, l := range s {
+		if i == len(s)-1 {
+			if l == '.' || l == ',' || l == '!' || l == '?' || l == ':' || l == ';' {
+				if s[i-1] == ' ' {
+					str = ReSpace(str)
+					str = str + string(l)
+				} else {
+					str = str + string(l)
+				}
+			} else {
+				str = str + string(l)
+			}
+		} else if l == '.' || l == ',' || l == '!' || l == '?' || l == ':' || l == ';' {
+			if s[i-1] == ' ' {
+				str = ReSpace(str)
+				str = str + string(l)
+			} else {
+				str = str + string(l)
+			}
+			if s[i+1] != ' ' && s[i+1] != '.' && s[i+1] != ',' && s[i+1] != '!' && s[i+1] != '?' && s[i+1] != ':' && s[i+1] != ';' {
+				str = str + " "
+			}
+		} else {
+			str = str + string(l)
+		}
+	}
+	return str
+}
+
+func ReSpace(s string) string {
+	l := len(s) - 1
+	if s[l-1] == ' ' {
+		return ReSpace(s[:l])
+	}
+	return s[:l]
+}
