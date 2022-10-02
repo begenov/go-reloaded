@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -16,9 +15,12 @@ func main() {
 	word = Running(word)
 	// fmt.Println(word)
 	strword := removeword(word)
-	fmt.Println(strword)
 	strword = Punctuation(strword)
-	fmt.Println(strword)
+	// fmt.Println(strword)
+	res := []byte(strword)
+	out := os.Args[2]
+	errRes := os.WriteFile(out, res, 0644)
+	Check(errRes)
 }
 
 func Running(res []string) []string {
