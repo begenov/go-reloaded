@@ -16,8 +16,14 @@ func main() {
 	file, err := os.ReadFile(args[0])
 	Check(err)
 	text := string(file)
-	text = sort(text)
-	split_text := strings.Split(text, " ")
+	// text = sort(text)
+
+	split_text := strings.Fields(text)
+	// fmt.Println(mas)
+	/*for _, v := range text {
+		fmt.Println(string(v))
+	}*/
+	//  split_text := strings.Split(text, " ")
 	split_text = firstHint(split_text)
 	split_text = performance(split_text)
 	str := removeword(split_text)
@@ -28,6 +34,18 @@ func main() {
 	errResult := os.WriteFile(args[1], result, 0644)
 	Check(errResult)
 }
+
+// func space(str string) string {
+// 	s := ""
+// 	for i := range str {
+// 		if str[i] == ' ' {
+// 			s += "" + str
+// 		} else {
+// 			s = " " + str
+// 		}
+// 	}
+// 	return s
+// }
 
 func performance(res []string) []string {
 	for i := range res {
@@ -153,8 +171,8 @@ func performance(res []string) []string {
 func Check(err error) {
 	if err != nil {
 
-		fmt.Println(err)
-		return
+		fmt.Println("ERROR:", err)
+		os.Exit(0)
 	}
 }
 
