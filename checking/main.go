@@ -1,8 +1,8 @@
 package main
 
 import (
+	"checking"
 	"fmt"
-	"goreloaded/checking"
 	"os"
 	"strings"
 )
