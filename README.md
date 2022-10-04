@@ -18,3 +18,8 @@ The tool you are about to build will receive as arguments the name of a file con
         If there are more than one word between the two ' ' marks, the program should place the marks next to the corresponding words (Ex: "As Elton John said: ' I am the most well-known homosexual in the world '" -> "As Elton John said: 'I am the most well-known homosexual in the world'")
 
     Every instance of a should be turned into an if the next word begins with a vowel or a h. (Ex: "There it was. A amazing rock!" -> "There it was. An amazing rock!").
+
+
+
+
+--------------- go run main.go sample.txt result.txt
