@@ -1,6 +1,6 @@
 package checing
 
-func removeword(s []string) string {
+func Removeword(s []string) string {
 	str := ""
 	for i := range s {
 		if s[i] == "(low," || s[i] == "(up," || s[i] == "(cap," {

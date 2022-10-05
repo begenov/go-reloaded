@@ -26,3 +26,4 @@ func sort(s string) string {
 		}
 	}
 	return str
+}

@@ -1,17 +1,16 @@
-package checking
+package checing
 
 import (
-	"checing"
 	"fmt"
 	"strconv"
 	"strings"
 )
 
-func performance(res []string) []string {
+func Performance(res []string) []string {
 	for i := range res {
 		if res[i] == "(hex)" {
 			hex, err := strconv.ParseInt(res[i-1], 16, 64)
-			checing.Check(err)
+			Check(err)
 			res[i-1] = strconv.FormatInt(hex, 10)
 		} else if res[i] == "(bin)" {
 			if res[i-1] == "" {
@@ -19,7 +18,7 @@ func performance(res []string) []string {
 				break
 			}
 			bin, err := strconv.ParseInt(res[i-1], 2, 64)
-			checing.Check(err)
+			Check(err)
 			res[i-1] = strconv.FormatInt(bin, 10)
 		} else if res[i] == "(up)" {
 			res[i-1] = strings.ToUpper(res[i-1])
@@ -30,7 +29,7 @@ func performance(res []string) []string {
 		} else if res[i] == "(low," {
 			num := res[i+1]
 			numn, err := strconv.Atoi(num[:len(num)-1])
-			checing.Check(err)
+			Check(err)
 			if numn <= 0 {
 				fmt.Println("Error : number is negative or zero")
 				continue
@@ -55,7 +54,7 @@ func performance(res []string) []string {
 		} else if res[i] == "(up," {
 			num := res[i+1]
 			numn, err := strconv.Atoi(num[:len(num)-1])
-			checing.Check(err)
+			Check(err)
 			if numn <= 0 {
 				fmt.Println("Error : number is negative or zero")
 			} else {
@@ -81,7 +80,7 @@ func performance(res []string) []string {
 		} else if res[i] == "(cap," {
 			num := res[i+1]
 			numn, err := strconv.Atoi(num[:len(num)-1])
-			checing.Check(err)
+			Check(err)
 			if numn <= 0 {
 				fmt.Println("Error : number is negative or zero")
 			} else {

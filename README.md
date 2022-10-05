@@ -21,5 +21,5 @@ The tool you are about to build will receive as arguments the name of a file con
 
 
 
-
+Terminal:
 --------------- go run main.go sample.txt result.txt

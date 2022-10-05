@@ -1,8 +1,8 @@
 package main
 
 import (
-	"checking"
 	"fmt"
+	checing "go-reloaded/checking"
 	"os"
 	"strings"
 )
@@ -14,14 +14,14 @@ func main() {
 		return
 	}
 	file, err := os.ReadFile(args[0])
-	checking.Check(err)
+	checing.Check(err)
 	text := string(file)
 	split_text := strings.Fields(text)
-	split_text = checking.firstHint(split_text)
-	split_text = checking.performance(split_text)
-	str := checking.removeword(split_text)
-	str = checking.punctuation(str)
+	split_text = checing.FirstHint(split_text)
+	split_text = checing.Performance(split_text)
+	str := checing.Removeword(split_text)
+	str = checing.Punctuation(str)
 	result := []byte(str)
 	errResult := os.WriteFile(args[1], result, 0644)
-	checking.Check(errResult)
+	checing.Check(errResult)
 }

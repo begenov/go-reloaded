@@ -1,12 +1,12 @@
 package checing
 
-func punctuation(s string) string {
+func Punctuation(s string) string {
 	str := ""
 	for i, l := range s {
 		if i == len(s)-1 {
 			if l == '.' || l == ',' || l == '!' || l == '?' || l == ':' || l == ';' {
 				if s[i-1] == ' ' {
-					str = checing.respace(str)
+					str = respace(str)
 					str = str + string(l)
 				} else {
 					str = str + string(l)
@@ -16,7 +16,7 @@ func punctuation(s string) string {
 			}
 		} else if l == '.' || l == ',' || l == '!' || l == '?' || l == ':' || l == ';' {
 			if s[i-1] == ' ' {
-				str = checing.respace(str)
+				str = respace(str)
 				str = str + string(l)
 			} else {
 				str = str + string(l)

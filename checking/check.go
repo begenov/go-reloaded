@@ -1,4 +1,4 @@
-package checking
+package checing
 
 import (
 	"fmt"
