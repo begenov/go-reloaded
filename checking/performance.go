@@ -2,129 +2,222 @@ package checing
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
 
-func Performance(res []string) []string {
-	for i := range res {
-		if res[i] == "(hex)" {
-			hex, err := strconv.ParseInt(res[i-1], 16, 64)
+func Performance(s []string) []string {
+	for i, word := range s {
+		if word == "(hex)" {
+			hexd, err := strconv.ParseInt(s[i-1], 16, 64)
 			Check(err)
-			res[i-1] = strconv.FormatInt(hex, 10)
-		} else if res[i] == "(bin)" {
-			if res[i-1] == "" {
-				fmt.Println("Incorect input")
-				break
-			}
-			bin, err := strconv.ParseInt(res[i-1], 2, 64)
+			s[i-1] = strconv.FormatInt(hexd, 10)
+			s[i] = ""
+		}
+		if word == "(bin)" {
+			bin, err := strconv.ParseInt(s[i-1], 2, 64)
 			Check(err)
-			res[i-1] = strconv.FormatInt(bin, 10)
-		} else if res[i] == "(up)" {
-			res[i-1] = strings.ToUpper(res[i-1])
-		} else if res[i] == "(low)" {
-			res[i-1] = strings.ToLower(res[i-1])
-		} else if res[i] == "(cap)" {
-			res[i-1] = strings.Title(res[i-1])
-		} else if res[i] == "(low," {
-			num := res[i+1]
-			numn, err := strconv.Atoi(num[:len(num)-1])
-			Check(err)
-			if numn <= 0 {
-				fmt.Println("Error : number is negative or zero")
-				continue
-			} else {
-				if numn > i-1 {
-					numn = i
-				}
-				for j := 1; j <= numn; j++ {
-					if i-j > 0 {
-						if res[i-j] == "" {
-							numn++
-							continue
-						}
-						if !(res[i-j] >= string(33) && res[i-j] <= string(64)) || (res[i-j] >= string(91) && res[i-j] <= string(96)) || (res[i-j] >= string(123) && res[i-j] <= string(126)) {
-							res[i-j] = strings.ToLower(res[i-j])
-						} else {
-							numn++
-						}
-					}
-				}
-			}
-		} else if res[i] == "(up," {
-			num := res[i+1]
-			numn, err := strconv.Atoi(num[:len(num)-1])
-			Check(err)
-			if numn <= 0 {
-				fmt.Println("Error : number is negative or zero")
-			} else {
-
-				if numn > i-1 {
-					numn = i
-				}
-				for j := 1; j <= numn; j++ {
-					if i-j > 0 {
-						if res[i-j] == "" {
-							numn++
-							continue
-						}
-						if !(res[i-j] >= string(33) && res[i-j] <= string(64)) || (res[i-j] >= string(91) && res[i-j] <= string(96)) || (res[i-j] >= string(123) && res[i-j] <= string(126)) {
-							res[i-j] = strings.ToUpper(res[i-j])
-						} else {
-							numn++
-						}
-					}
-				}
-			}
-
-		} else if res[i] == "(cap," {
-			num := res[i+1]
-			numn, err := strconv.Atoi(num[:len(num)-1])
-			Check(err)
-			if numn <= 0 {
-				fmt.Println("Error : number is negative or zero")
-			} else {
-				if numn > i-1 {
-					numn = i
-				}
-				for j := 1; j <= numn; j++ {
-
-					if res[i-j] == "" {
-						numn++
+			s[i-1] = strconv.FormatInt(bin, 10)
+			s[i] = ""
+		}
+		if word == "(cap)" {
+			num := 1
+			for j := 1; j <= num; j++ {
+				if i-j >= 0 {
+					if s[i-j] == "" {
+						num++
 						continue
 					}
-					if !(res[i-j] >= string(33) && res[i-j] <= string(64)) || (res[i-j] >= string(91) && res[i-j] <= string(96)) || (res[i-j] >= string(123) && res[i-j] <= string(126)) {
-						res[i-j] = strings.ToLower(res[i-j])
-						res[i-j] = strings.Title(res[i-j])
-					} else {
-						numn++
-					}
-
+					s[i-j] = strings.ToLower(s[i-j])
+					s[i-j] = strings.Title(s[i-j])
 				}
 			}
-		} else if res[i] == "a" {
-			low := strings.ToLower(res[i+1])
-			if low[0] == 'h' || low[0] == 'a' || low[0] == 'e' || low[0] == 'i' || low[0] == 'o' || low[0] == 'u' {
-				res[i] = "an"
+			s[i] = ""
+		}
+		if word == "(up)" {
+			num := 1
+			for j := 1; j <= num; j++ {
+				if i-j >= 0 {
+					if s[i-j] == "" {
+						num++
+						continue
+					}
+					s[i-1] = strings.ToUpper(s[i-1])
+				}
 			}
-		} else if res[i] == "A" {
-			low := strings.ToLower(res[i+1])
-			if low[0] == 'h' || low[0] == 'a' || low[0] == 'e' || low[0] == 'i' || low[0] == 'o' || low[0] == 'u' {
-				res[i] = "An"
+			s[i] = ""
+		}
+		if word == "(low)" {
+			num := 1
+			for j := 1; j <= num; j++ {
+				if i-j >= 0 {
+					if s[i-j] == "" {
+						num++
+						continue
+					}
+					s[i-1] = strings.ToLower(s[i-1])
+				}
 			}
-		} else if res[i] == "an" {
-			low := strings.ToLower(res[i+1])
-			if low[0] == 'a' || low[0] == 101 || low[0] == 'u' || low[0] == 'e' || low[0] == 'o' || low[0] == 'h' {
-				res[i] = "a"
+			s[i] = ""
+		}
+		if word == "(cap," {
+			if !(s[i+1] == "") {
+				runes := []rune(s[i+1])
+				str := ""
+				str1 := ""
+				for k := 0; k < len(runes); k++ {
+					if !(runes[k] >= 48 && runes[k] <= 57) && runes[k] != 41 {
+						continue
+					} else if runes[k] == 41 {
+						for l := k + 1; l < len(runes); l++ {
+							str1 = str1 + string(runes[l])
+						}
+					} else {
+						str = str + string(runes[k])
+					}
+				}
+				num, err := strconv.Atoi(str)
+				Check(err)
+				if num <= 0 {
+					fmt.Println("Error : number is negative or zero")
+				} else {
+					if num > i-1 {
+						num = i
+						if s[i] == ")" {
+							num++
+						}
+					}
+					for j := 1; j <= num; j++ {
+						if i-j >= 0 {
+							if s[i-j] == "" {
+								num++
+								continue
+							}
+							s[i-j] = strings.ToLower(s[i-j])
+							s[i-j] = strings.Title(s[i-j])
+							s[i] = ""
+							s[i+1] = str1
+						}
+					}
+				}
+			} else {
+				fmt.Println("Error: next arguments aren't number")
+				os.Exit(0)
 			}
-		} else if res[i] == "An" {
-			low := strings.ToLower(res[i+1])
-			if low[0] == 'a' || low[0] == 101 || low[0] == 'u' || low[0] == 'e' || low[0] == 'o' || low[0] == 'h' {
-				res[i] = "A"
+		}
+		if word == "(low," {
+			if !(s[i+1] == "") {
+				runes := []rune(s[i+1])
+				str := ""
+				str1 := ""
+				for k := 0; k < len(runes); k++ {
+					if !(runes[k] >= 48 && runes[k] <= 57) && runes[k] != 41 {
+						continue
+					} else if runes[k] == 41 {
+						for l := k + 1; l < len(runes); l++ {
+							str1 = str1 + string(runes[l])
+						}
+					} else {
+						str = str + string(runes[k])
+					}
+				}
+				num, err := strconv.Atoi(str)
+				Check(err)
+				if num <= 0 {
+					fmt.Println("Error : number is negative or zero")
+				} else {
+					if num > i-1 {
+						num = i
+						if s[i] == ")" {
+							num++
+						}
+					}
+					for j := 1; j <= num; j++ {
+						if i-j >= 0 {
+							if s[i-j] == "" {
+								num++
+								continue
+							}
+							s[i-j] = strings.ToLower(s[i-j])
+							s[i] = ""
+							s[i+1] = str1
+						}
+					}
+				}
+			} else {
+				fmt.Println("Error: next arguments aren't number")
+				os.Exit(0)
 			}
-		} else if res[i] == "‘" {
-			res[i] = "'"
+		}
+		if word == "(up," {
+			if !(s[i+1] == "") {
+				runes := []rune(s[i+1])
+				str := ""
+				str1 := ""
+				for k := 0; k < len(runes); k++ {
+					if !(runes[k] >= 48 && runes[k] <= 57) && runes[k] != 41 {
+						continue
+					} else if runes[k] == 41 {
+						for l := k + 1; l < len(runes); l++ {
+							str1 = str1 + string(runes[l])
+						}
+					} else {
+						str = str + string(runes[k])
+					}
+				}
+				num, err := strconv.Atoi(str)
+				Check(err)
+				if num <= 0 {
+					fmt.Println("Error : number is negative or zero")
+				} else {
+					if num > i-1 {
+						num = i
+						if s[i] == ")" {
+							num++
+						}
+					}
+					for j := 1; j <= num; j++ {
+						if i-j >= 0 {
+							if s[i-j] == "" {
+								num++
+								continue
+							}
+							s[i-j] = strings.ToUpper(s[i-j])
+							s[i] = ""
+							s[i+1] = str1
+						}
+					}
+				}
+			} else {
+				fmt.Println("Error: next arguments aren't number")
+				os.Exit(0)
+			}
+		}
+		if word == "a" {
+			fletter := strings.ToLower(s[i+1])
+			if fletter[0] == 'a' || fletter[0] == 'e' || fletter[0] == 'i' || fletter[0] == 'o' || fletter[0] == 'u' || fletter[0] == 'h' {
+				s[i] = "an"
+			}
+		}
+		if word == "A" {
+			fletter := strings.ToLower(s[i+1])
+			if fletter[0] == 'a' || fletter[0] == 'e' || fletter[0] == 'i' || fletter[0] == 'o' || fletter[0] == 'u' || fletter[0] == 'h' {
+				s[i] = "An"
+			}
+		}
+		if word == "an" {
+			fletter := strings.ToLower(s[i+1])
+			if (fletter[0] >= 98 && fletter[0] <= 100) || (fletter[0] >= 102 && fletter[0] <= 103) || (fletter[0] >= 106 && fletter[0] <= 110) || (fletter[0] >= 112 && fletter[0] <= 116) || (fletter[0] >= 118 && fletter[0] <= 122) {
+				s[i] = "a"
+			}
+		}
+		if word == "An" {
+			fletter := strings.ToLower(s[i+1])
+			if (fletter[0] >= 98 && fletter[0] <= 100) || (fletter[0] >= 102 && fletter[0] <= 103) || (fletter[0] >= 106 && fletter[0] <= 110) || (fletter[0] >= 112 && fletter[0] <= 116) || (fletter[0] >= 118 && fletter[0] <= 122) {
+				s[i] = "A"
+			}
 		}
 	}
-	return res
+	return s
 }
