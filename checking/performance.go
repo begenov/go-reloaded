@@ -122,6 +122,8 @@ func Performance(res []string) []string {
 			if low[0] == 'a' || low[0] == 101 || low[0] == 'u' || low[0] == 'e' || low[0] == 'o' || low[0] == 'h' {
 				res[i] = "A"
 			}
+		} else if res[i] == "‘" {
+			res[i] = "'"
 		}
 	}
 	return res

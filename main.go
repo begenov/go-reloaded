@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	checing "go-reloaded/checking"
 	"os"
 	"strings"
+
+	checing "go-reloaded/checking"
 )
 
 func main() {
@@ -16,12 +17,13 @@ func main() {
 	file, err := os.ReadFile(args[0])
 	checing.Check(err)
 	text := string(file)
-	split_text := strings.Fields(text)
+	split_text := strings.Split(text, " ")
 	split_text = checing.FirstHint(split_text)
 	split_text = checing.Performance(split_text)
 	str := checing.Removeword(split_text)
 	str = checing.Punctuation(str)
+	str = checing.Sort(str)
 	result := []byte(str)
-	errResult := os.WriteFile(args[1], result, 0644)
+	errResult := os.WriteFile(args[1], result, 0o644)
 	checing.Check(errResult)
 }

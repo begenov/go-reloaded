@@ -1,6 +1,6 @@
 package checing
 
-func sort(s string) string {
+func Sort(s string) string {
 	str := ""
 
 	removeSpace := false
