@@ -5,7 +5,10 @@ func Sort(s string) string {
 
 	removeSpace := false
 	for i, letter := range s {
-		if letter == 39 && (s[i-1] == ' ') {
+		if i == 0 && letter == '\'' {
+			str = str + string(letter)
+			removeSpace = true
+		} else if letter == 39 && (s[i-1] == ' ') {
 			if removeSpace {
 				str = str[:len(str)-1]
 				str = str + string(letter)
@@ -23,6 +26,7 @@ func Sort(s string) string {
 			}
 		} else {
 			str = str + string(letter)
+			// removeSpace = true
 		}
 	}
 	return str
