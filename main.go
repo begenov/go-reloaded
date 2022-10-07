@@ -28,3 +28,5 @@ func main() {
 	errResult := os.WriteFile(args[1], result, 0o644)
 	checing.Check(errResult)
 }
+
+// string to convert []string
