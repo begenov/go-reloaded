@@ -8,7 +8,7 @@ import (
 func Check(e error) {
 	if e != nil {
 
-		fmt.Println("ERROR:", e)
+		fmt.Println("Incorrect values")
 		os.Exit(0)
 
 	}
